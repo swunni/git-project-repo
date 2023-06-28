@@ -7,7 +7,7 @@
 git-project-repo
 
 ### Description
-
+This project simulates a realistic workflow to refactor BikeShare project using Git. 
 
 ### Files used
 
