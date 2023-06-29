@@ -7,46 +7,63 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
 
-def get_filters():
-    """
-    Asks user to specify a city, month, and day to analyze.
-
-    Returns:
-        (str) city - name of the city to analyze
-        (str) month - name of the month to filter by, or "all" to apply no month filter
-        (str) day - name of the day of week to filter by, or "all" to apply no day filter
-    """
-    print('Hello! Let\'s explore some US bikeshare data!')
-    # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
-
-    cities = ['chicago', 'new york city', 'washington']
-    while True:
-        city = input("Would you like to see data for Chicago, New York City or Washington?").lower()
-        if city not in ('chicago', 'new york city', 'washington'):
-            print("Please enter one of the provided cities.")
-        else:
-            break
-
-    # get user input for month (all, january, february, ... , june)
-
-    while True:
-        month = input("Which Month you like to see?\nJanuary, February, March, April, May, June or all month?\n").lower()
-        if month not in ('january', 'february', 'march', 'april', 'may', 'june', 'all'):
-            print("Something went wrong. Please enter one of the given Month or all.")
-        else:
-            break
-
-    # get user input for day of week (all, monday, tuesday, ... sunday)
-
-    while True:
-        day = input("Which day of the week?\nPlease typethe full name like Monady, etc. or all.").lower()
-        if day not in ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'all'):
-            print("An unexpected mistake happe, please check that you write the day correct.")
-        else:
-            break
-
-    print('-'*40)
-    return city, month, day
+def check_data_entry(prompt, valid_entries):  
+    """ 
+    Asks user to type some input and verify if the entry typed is valid. 
+    Since we have 3 inputs to ask the user in get_filters(), it is easier to write a function. 
+    Args: 
+        (str) prompt - message to display to the user 
+        (list) valid_entries - list of string that should be accepted  
+    Returns: 
+        (str) user_input - the user's valid input 
+    """ 
+    try: 
+        user_input = str(input(prompt)).lower() 
+ 
+        while user_input not in valid_entries :  
+            print('Sorry... it seems like you\'re not typing a correct entry.') 
+            print('Let\'s try again!') 
+            user_input = str(input(prompt)).lower() 
+ 
+        print('Great! the chosen entry is: {}\n'.format(user_input)) 
+        return user_input 
+ 
+    except: 
+        print('Seems like there is an issue with your input') 
+ 
+ 
+ 
+def get_filters():  
+    """ 
+    Asks user to specify a city, month, and day to analyze. 
+ 
+    Returns: 
+        (str) city - name of the city to analyze 
+        (str) month - name of the month to filter by, or "all" to apply no month filter 
+        (str) day - name of the day of week to filter by, or "all" to apply no day filter 
+    """ 
+ 
+    print('Hi there! Let\'s explore some US bikeshare data!') 
+ 
+    # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs 
+    valid_cities = CITY_DATA.keys() 
+    prompt_cities = 'Please choose one of the 3 cities (chicago, new york city, washington): ' 
+    city = check_data_entry(prompt_cities, valid_cities) 
+ 
+ 
+    # get user input for month (all, january, february, ... , june) 
+    valid_months = ['all','january','february','march','april','may','june'] 
+    prompt_month = 'Please choose a month (all, january, february, ... , june): ' 
+    month = check_data_entry(prompt_month, valid_months) 
+ 
+    # get user input for day of week (all, monday, tuesday, ... sunday) 
+    valid_days = ['all','monday','tuesday','wednesday','thursday','friday','saturday', 'sunday'] 
+    prompt_day = 'Please choose a day (all, monday, tuesday, ... sunday): ' 
+    day = check_data_entry(prompt_day, valid_days) 
+ 
+ 
+    print('-'*40) 
+    return city, month, day 
 
 
 def load_data(city, month, day):
@@ -85,20 +102,20 @@ def time_stats(df):
     # display the most common month
 
     df['month'] = df['Start Time'].dt.month_name()
-    common_month = df['month'].mode()[0]
-    print('The most common month is: ', common_month)
+    co_month = df['month'].mode()[0]
+    print('The most common month is: ', co_month)
 
     # display the most common day of week
 
     df['day'] = df['Start Time'].dt.day_name()
-    common_day = df['day'].mode()[0]
-    print('The most common day of the week is: ', common_day)
+    co_day = df['day'].mode()[0]
+    print('The most common day of the week is: ', co_day)
 
     # display the most common start hour
 
     df['hour'] = df['Start Time'].dt.hour
-    common_hour = df['hour'].mode()[0]
-    print('The most common start hour is: ', common_hour, 'o\'clock')
+    co_hour = df['hour'].mode()[0]
+    print('The most common start hour is: ', co_hour, 'o\'clock')
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -112,19 +129,19 @@ def station_stats(df):
 
     # display most commonly used start station
 
-    start_station = df['Start Station'].mode()[0]
-    print('The most commonly used start station is:', start_station)
+    start_stat = df['Start Station'].mode()[0]
+    print('The most commonly used start station is:', start_stat)
 
     # display most commonly used end station
 
-    end_station = df['End Station'].mode()[0]
-    print('The most commonly used end station is:', end_station)
+    end_stat = df['End Station'].mode()[0]
+    print('The most commonly used end station is:', end_stat)
 
     # display most frequent combination of start station and end station trip
 
     df['Combination Station'] = df['Start Station'] + " " + df['End Station']
-    combination_stations = df['Combination Station'].mode()[0]
-    print('The most frequent combination of start station and end station is: ', combination_stations)
+    comb_stations = df['Combination Station'].mode()[0]
+    print('The most frequent combination of start station and end station is: ', comb_stations)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
